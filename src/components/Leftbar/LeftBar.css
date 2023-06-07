@@ -1,0 +1,23 @@
+.leftbar1 {
+  top: 50px;
+  width: 19%;
+  position: absolute;
+  /* background-color: #fcf9f9; */
+  height: 200%;
+}
+
+.leftbar1 > ul {
+  text-decoration: none;
+  list-style: none;
+}
+
+.list_item:hover {
+  cursor: pointer;
+}
+
+.crt {
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 450px;
+}

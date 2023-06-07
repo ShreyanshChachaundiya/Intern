@@ -1,0 +1,57 @@
+.keepers {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.one {
+  width: 400px;
+  height: 30px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  margin: 2px;
+  justify-content: space-between;
+  padding: 5px;
+  border-radius: 7px;
+  margin-bottom: 4px;
+}
+
+.k_img {
+  height: 50px;
+}
+
+.one_one {
+  display: flex;
+  align-items: center;
+}
+
+.k_button {
+  border: solid 1px #707070;
+  border-radius: 10px;
+  height: 30px;
+  background-color: rgb(243, 247, 249);
+}
+.k_button:hover {
+  cursor: pointer;
+}
+
+.one_one > span {
+  color: #de931b;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.head_k {
+  color: #707070;
+  font-weight: 700;
+  font-size: 14px;
+  margin: 1px;
+}
+
+.inbox1 {
+  color: #a198a2;
+  font-weight: 700;
+  font-size: 14px;
+  margin: 5px;
+}

@@ -1,0 +1,10 @@
+.middle {
+  position: absolute;
+  width: 50%;
+  height: 800px;
+  /* background-color: #fcf9f9; */
+  top: 50px;
+  left: 270px;
+  margin:10px;
+  margin-left: 0;
+}

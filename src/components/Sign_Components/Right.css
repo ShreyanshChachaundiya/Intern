@@ -1,0 +1,22 @@
+.sign_right{
+    height: 100vh;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 23%;
+}
+
+.crt1{
+    top: 0;
+    right: 0;
+    position: absolute;
+    height: 450px;
+}
+
+.rgt_bx{
+    position: absolute;
+    top: 5px;
+    right: 30px;
+    height: 86%;
+    width: 40%;
+}

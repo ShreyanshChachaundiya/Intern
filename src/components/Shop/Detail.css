@@ -1,0 +1,7 @@
+.custom-bullet {
+  background-color: rgb(172, 172, 182);
+}
+
+.custom-bullet-active {
+  background-color: rgb(231, 16, 16);
+}

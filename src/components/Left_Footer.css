@@ -1,0 +1,25 @@
+.lfoot1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  width: 350px;
+  height: 40px;
+  background-color: aqua;
+  bottom: 0;
+  border-radius: 20px;
+  background-color: #e5ded2;
+  padding: 0 20px;
+}
+
+.lfoot1 > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.util {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

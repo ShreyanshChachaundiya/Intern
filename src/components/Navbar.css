@@ -1,0 +1,54 @@
+.navbarContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 50px;
+  background-color: #b122d3;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  margin-bottom: 0px;
+}
+.input {
+  border-radius: 10px;
+  border: solid white;
+  height: 20px;
+  width: 16rem;
+}
+.small {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  /* // justify-content: space-around; */
+  width: 6.5rem;
+}
+.icon {
+  height: 32px;
+}
+
+.search_nav {
+  width: 17rem;
+  background-color: white;
+  border-radius: 10px;
+  border: solid #f2eded 2px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  margin-right: 4.5rem;
+}
+.input:focus {
+  outline: none;
+}
+
+
+.small>span{
+  display: flex;
+}
+.vicon{
+  position: relative;
+  top: 18px;
+  height: 17px;
+  width: 20px;
+}

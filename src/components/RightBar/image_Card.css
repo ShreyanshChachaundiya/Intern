@@ -1,0 +1,69 @@
+.img_card{
+  display: flex;
+  justify-content: space-between;
+}
+.story {
+  position: relative;
+  height: 150px;
+}
+.spann {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  top: -70px;
+  width: 90px;
+  align-items: center;
+}
+.tick {
+  position: relative;
+  top: 2px;
+  height: 14.5px;
+}
+.spannn {
+  position: relative;
+  top: -55px;
+}
+
+.background {
+  position: relative;
+  width: 90px;
+  height: 130px;
+}
+.profile {
+  position: relative;
+  left: 0px;
+  top: -65px;
+  border: solid 2px rgb(237, 186, 105);
+  border-radius: 100%;
+  object-fit: cover;
+  margin-bottom: 0;
+}
+
+.crt1 {
+  top: 0;
+  right: 0px;
+  position: absolute;
+  height: 450px;
+}
+
+.img_card {
+  display: flex;
+  margin: 10px;
+  margin-top: 8px;
+  justify-content: space-around;
+  margin-bottom: 0;
+}
+
+.view {
+  position: relative;
+  top: 130px;
+}
+
+.view > li {
+  list-style: none;
+  margin-left: 0;
+  color: blue;
+}
+.view > li:hover {
+  cursor: pointer;
+}

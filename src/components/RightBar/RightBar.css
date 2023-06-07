@@ -1,0 +1,78 @@
+.rightbar {
+  width: 31%;
+  top: 50px;
+  right: 0px;
+  position: absolute;
+  margin-right: 0;
+  padding-right: 0;
+  /* background-color: #fcf9f9; */
+}
+
+.story {
+  position: relative;
+  height: 150px;
+}
+.spann {
+  position: relative;
+  top: -70px;
+}
+.spannn {
+  position: relative;
+  top: -55px;
+}
+
+.background {
+  position: relative;
+  width: 90px;
+  height: 130px;
+}
+.profile {
+  position: relative;
+  left: 0px;
+  top: -65px;
+  border: solid 2px rgb(237, 186, 105);
+  border-radius: 100%;
+  object-fit: cover;
+  margin-bottom: 0;
+}
+
+.crt1 {
+  top: 0;
+  right: 0px;
+  position: absolute;
+  height: 450px;
+}
+
+.img_card {
+  display: flex;
+  margin: 10px;
+  margin-top: 30px;
+  justify-content: space-around;
+  margin-bottom: 0;
+}
+
+.view {
+  position: relative;
+  top: 130px;
+}
+
+.view > li {
+  list-style: none;
+  margin-left: 0;
+  color: blue;
+}
+.view > li:hover {
+  cursor: pointer;
+}
+
+.live {
+  display: flex;
+  align-items: start;
+  top: 10px;
+}
+
+.live > span {
+  color: #a32f96;
+  font-size: 14px;
+  font-weight: 700;
+}

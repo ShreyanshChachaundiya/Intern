@@ -1,0 +1,75 @@
+.mplace {
+  width: 90%;
+  height: 100px;
+
+  align-items: center;
+  padding: 15px;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.mimg {
+  height: 70px;
+}
+
+.placec {
+  width: 95%;
+  height: 90%;
+}
+.minput {
+  width: 90%;
+  height: 90%;
+  border: none;
+  background-color: #fcf9f9;
+}
+.minput:focus {
+  outline: none;
+}
+
+.up {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.but {
+  height: 30px;
+  width: 79%;
+  position: relative;
+  top: 130px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 150px;
+  padding-right: 10px;
+  align-items: center;
+}
+
+.buticon > div{
+  margin: 3px;
+}
+
+.butbut {
+  background-color: #f7bb34;
+  color: white;
+  border-radius: 15px;
+  border: none;
+  width: 80px;
+  height: 50;
+  padding: 5px;
+  font-weight: 700;
+  font-style: 18px;
+}
+
+::placeholder {
+  color: gray;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.buticon{
+  display: flex;
+}
+
