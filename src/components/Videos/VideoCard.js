@@ -69,7 +69,8 @@ const VideoCard = ({ video }) => {
         <div style={{ position: "relative" }}>
           <video
             ref={videoRef}
-            src={`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/${data?.filename}`}
+            // src={`http://localhost:5000/${data?.filename}`}
+            src="/videos/testing.mp4"
             height="100%"
             width="100%"
             onClick={handlePlay}
