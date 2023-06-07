@@ -52,7 +52,7 @@ const Main2 = () => {
     e.preventDefault();
 
     const responce = await fetch(
-      "http://localhost:5000/api/users/signup",
+      "https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/users/signup",
       {
         method: "POST",
         headers: {
