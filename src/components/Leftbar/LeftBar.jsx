@@ -54,10 +54,12 @@ const LeftBar = () => {
           <img src="../icons/events.png" className="h-[25px] mr-[5px]" />
           <li>Live Events</li>
         </div>
-        <div className="list_item flex justify-start align-middle pl-[10%] text-[15px] text-[#707070] mb-4">
-          <img src="../icons/music.png" className="h-[25px] mr-[5px]" />
-          <li>Music</li>
-        </div>
+        <Link to="/music">
+          <div className="list_item flex justify-start align-middle pl-[10%] text-[15px] text-[#707070] mb-4">
+            <img src="../icons/music.png" className="h-[25px] mr-[5px]" />
+            <li>Music</li>
+          </div>
+        </Link>
         <Link to="/videos">
           <div className="list_item flex justify-start align-middle pl-[10%] text-[15px] text-[#707070] mb-4">
             <img src="../icons/videos.png" className="h-[25px] mr-[5px]" />

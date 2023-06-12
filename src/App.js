@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import Signature_Platform from "./Pages/Signature_Platform";
@@ -30,7 +30,8 @@ import ShopAll from "./Pages/Shop/ShopAll";
 import Product from "./Pages/Shop/Product";
 import Videos from "./Pages/Videos/videos";
 import VideoPicker from "./shared/Video/VideoPicker";
-
+import Music from "./Pages/Music/Music";
+import CloudinaryConfig from "./cloudinaryConfig";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -49,7 +50,13 @@ function App() {
     setRole(role);
     localStorage.setItem(
       "userData",
-      JSON.stringify({ userId: uid, token: token, name:name, userName:userName, role:role })
+      JSON.stringify({
+        userId: uid,
+        token: token,
+        name: name,
+        userName: userName,
+        role: role,
+      })
     );
   }, []);
 
@@ -63,7 +70,13 @@ function App() {
     const storedData = JSON.parse(localStorage.getItem("userData"));
     if (storedData && storedData.token) {
       // setUserId(storedData.userId);
-      login(storedData.userId, storedData.token, storedData.name, storedData.userName, storedData.role);
+      login(
+        storedData.userId,
+        storedData.token,
+        storedData.name,
+        storedData.userName,
+        storedData.role
+      );
     }
   }, [login]);
 
@@ -92,21 +105,21 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<LogIn />} exact />
-        <Route path="/hashtags/:hashtag" element={<Hastag2/>} />
-        <Route path="/news/latestNews" element={<LatestNews/>} />
-        <Route path="/reset-Password/:id/:token" element={<New_Password/>}/>
-        <Route path="/Forgot_Password" element={<Email_Reset/>}/>
-        <Route path="/main" element={<Main />}/>
-        <Route path="/ALL/Hashtags" element={<Hastag/>} />
-        <Route path="/blogs/All" element={<AllBlogs/>} />
-        <Route path="/blog/:id" element={<BlogPage/>} />
-        <Route path="/shops/All" element={<ShopAll/>} />
-        <Route path="/shop/:id" element={<Product/>} />
-        <Route path="/videos" element={<Videos/>} />
+        <Route path="/hashtags/:hashtag" element={<Hastag2 />} />
+        <Route path="/news/latestNews" element={<LatestNews />} />
+        <Route path="/reset-Password/:id/:token" element={<New_Password />} />
+        <Route path="/Forgot_Password" element={<Email_Reset />} />
+        <Route path="/main" element={<Main />} />
+        <Route path="/ALL/Hashtags" element={<Hastag />} />
+        <Route path="/blogs/All" element={<AllBlogs />} />
+        <Route path="/blog/:id" element={<BlogPage />} />
+        <Route path="/shops/All" element={<ShopAll />} />
+        <Route path="/shop/:id" element={<Product />} />
+        <Route path="/videos" element={<Videos />} />
+        <Route path="/music" element={<Music />} />
 
-
-        <Route path="/main2" element={<Main2/>}/>
-        <Route path="/*" element={<Error />}/>
+        <Route path="/main2" element={<Main2 />} />
+        <Route path="/*" element={<Error />} />
       </Routes>
     );
   } else {
@@ -121,6 +134,7 @@ function App() {
         {/* <Profile/> */}
         <Route path="/main2" element={<Main2 />} />
         <Route path="/error" element={<Error />} />
+        <Route path="/*" element={<LogIn />} />
         {/* <Main2 /> */}
         {/* <Block/> */}
         {/* <Kids/> */}
@@ -135,13 +149,14 @@ function App() {
 
   return (
     <div className="App bg-[#fcf9f9] h-[300vh]">
+    
       <AuthContext.Provider
         value={{
           isLoggedIn: !!token,
           token: token,
           userId: userId,
-          name:name,
-          role:role,
+          name: name,
+          role: role,
           login: login,
           logout: logout,
         }}
@@ -156,6 +171,7 @@ function App() {
         <BrowserRouter>{routes}</BrowserRouter>
         {/* </PostContext.Provider> */}
       </AuthContext.Provider>
+   
     </div>
   );
 }

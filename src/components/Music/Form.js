@@ -1,36 +1,37 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
-import VideoPicker from "../../shared/Video/VideoPicker";
 
 const Form = ({ handleClose }) => {
   const auth = useContext(AuthContext);
   const userName = auth.name;
   const [name, setName] = useState(userName);
-  const [caption, setCaption] = useState("");
-  const [isVideo, setIsVideo] = useState(false);
+  const [title, setTitle] = useState("");
+  const [artist, setArtist] = useState("");
+  const [isMusic, setIsMusic] = useState(false);
   const [errors, setErrors] = useState({});
   const id = auth.userId;
   const token = auth.token;
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedMusic, setSelectedMusic] = useState(null);
 
-  const handleVideoChange = (event) => {
+  const handleMusicChange = (event) => {
     const file = event.target.files[0];
-    setSelectedVideo(file);
-    setIsVideo(true);
+    setSelectedMusic(file);
+    setIsMusic(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = {};
-    if (name.trim() === "") {
-      validationErrors.name = "name is required";
+  
+    if (title.trim() === "") {
+      validationErrors.title = "title is required";
     }
-    if (caption.trim() === "") {
-      validationErrors.caption = "caption is required";
+    if (isMusic === false) {
+      validationErrors.Music = "Music is required";
     }
-    if (isVideo === false) {
-      validationErrors.video = "video is required";
+    if (artist.trim() === false) {
+      validationErrors.Artist = "Artist is required";
     }
   
     // Check if there are any errors
@@ -46,11 +47,10 @@ const Form = ({ handleClose }) => {
 
   const add = async () => {
     const formData = new FormData();
-    formData.append("user",id);
-    formData.append("name",name);
-    formData.append("video", selectedVideo);
-    formData.append("caption",caption);
-    const responce = await fetch("https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/videos/add", {
+    formData.append("music", selectedMusic);
+    formData.append("title",title);
+    formData.append("artist",artist);
+    const responce = await fetch("https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/musics/add", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -73,43 +73,28 @@ const Form = ({ handleClose }) => {
 
   return (
     <form className="max-w-xl mx-auto" onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block mb-2 text-lg text-left" htmlFor="name">
-          name:
-        </label>
-        <input
-          className={`w-full p-2 border ${
-            errors.name ? "border-red-500" : "border-gray-300"
-          }`}
-          type="text"
-          id="name"
-          value={name}
-          disabled
-        />
-        {errors.name && <p className="text-red-500">{errors.name}</p>}
-      </div>
 
       <div>
-        <label className="block mb-2 text-lg text-left">Video Upload:</label>
+        <label className="block mb-2 text-lg text-left">Music Upload:</label>
         <div>
       <input
-        id="videoInput"
+        id="MusicInput"
         type="file"
-        accept="video/mp4,video/ogg"
+        accept=".mp3,.mpeg"
         className="hidden"
-        name="video"
-        onChange={handleVideoChange}
+        name="Music"
+        onChange={handleMusicChange}
       />
-      <div className="flex items-center justify-center w-full h-40 border-2 border-gray-300 rounded-md">
-        {selectedVideo ? (
-          <video
+      <div className="flex items-center justify-center w-full h-10 border-2 border-gray-300 rounded-md">
+        {selectedMusic ? (
+          <audio
             className="w-full h-full object-cover"
-            src={URL.createObjectURL(selectedVideo)}
+            src={URL.createObjectURL(selectedMusic)}
             controls
           />
         ) : (
           <label
-            htmlFor="videoInput"
+            htmlFor="MusicInput"
             className="flex items-center justify-center w-full h-full text-gray-500 cursor-pointer"
           >
             <svg
@@ -126,27 +111,42 @@ const Form = ({ handleClose }) => {
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
             </svg>
-            <span className="ml-2 text-lg">Upload a video</span>
+            <span className="ml-2 text-lg">Upload a Music</span>
           </label>
         )}
       </div>
     </div>
-        {errors.video && <p className="text-red-500">{errors.video}</p>}
+        {errors.Music && <p className="text-red-500">{errors.Music}</p>}
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 text-lg text-left" htmlFor="caption">
-          caption:
+        <label className="block mb-2 text-lg text-left" htmlFor="title">
+          title:
         </label>
         <textarea
           className={`w-full p-2 border ${
-            errors.caption ? "border-red-500" : "border-gray-300"
+            errors.title ? "border-red-500" : "border-gray-300"
           }`}
-          id="caption"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         ></textarea>
-        {errors.caption && <p className="text-red-500">{errors.caption}</p>}
+        {errors.title && <p className="text-red-500">{errors.title}</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-lg text-left" htmlFor="artist">
+          artist:
+        </label>
+        <textarea
+          className={`w-full p-2 border ${
+            errors.title ? "border-red-500" : "border-gray-300"
+          }`}
+          id="artist"
+          value={artist}
+          onChange={(e) => setArtist(e.target.value)}
+        ></textarea>
+        {errors.artist && <p className="text-red-500">{errors.artist}</p>}
       </div>
 
       <button

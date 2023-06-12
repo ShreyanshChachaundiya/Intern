@@ -8,7 +8,7 @@ const LogIn = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
   const auth = useContext(AuthContext);
-  const token =auth.token;
+  const token = auth.token;
 
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const LogIn = () => {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           email: formValues.email,
@@ -51,7 +51,7 @@ const LogIn = () => {
     console.log(res);
     // navigate(`/main/${res.userId}`);
     navigate("/main");
-    auth.login(res.userId,res.token,res.name,res.userName,res.isAdmin);
+    auth.login(res.userId, res.token, res.name, res.userName, res.isAdmin);
     setIsSubmit(true);
   };
 
@@ -76,8 +76,8 @@ const LogIn = () => {
   };
 
   return (
-    <div>
-      <div className=" ">
+    <div className="h-[200px]">
+      <div className="">
         <img
           src="icons/background.png"
           className="object-fill absolute w-[100%] h-screen"

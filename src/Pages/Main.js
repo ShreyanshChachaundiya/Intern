@@ -5,8 +5,12 @@ import Middle from "./../components/Middle/Middle";
 import Navbar from "./../components/Navbar";
 import RightBar from "./../components/RightBar/RightBar";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../shared/context/auth-context";
 
 function Main() {
+  const {logout} = useContext(AuthContext);
+  
   return (
     <div className="main">
       <Navbar />
@@ -29,7 +33,7 @@ function Main() {
               <img src="icons/tick.png" />
             </div>
             <Link className="flink">
-              <div>
+              <div onClick={()=>{logout()}}>
                 Log out <span> </span> <img src="icons/log.png" />{" "}
                 <img src="icons/out.png" />
               </div>
