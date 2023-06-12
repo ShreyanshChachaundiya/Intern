@@ -72,7 +72,7 @@ const MusicCard = ({music}) => {
         <div style={{ position: "relative" }}>
           <audio
             ref={MusicRef}
-            src={MusicUrl}
+            // src={MusicUrl}
             //src="/icons/audio.mpeg"
             height="100%"
             width="100%"
@@ -80,8 +80,8 @@ const MusicCard = ({music}) => {
             className="h-[24rem]"
             style={{ objectFit: "cover" }}
           >
-             <source src={`https://res.cloudinary.com/dijd86cbs/music/upload/${data?.filename}`} type="audio/mpeg" />
-             <source src={`https://res.cloudinary.com/dijd86cbs/music/upload/${data?.filename}`} type="audio/mp3" />
+             <source src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`}  />
+      
           </audio>
           {/* {!isPlaying && (
             <button
