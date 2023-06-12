@@ -80,6 +80,7 @@ const MusicCard = ({music}) => {
             className="h-[24rem]"
             style={{ objectFit: "cover" }}
           >
+             <source src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`} type="audio/mpeg" />
              <source src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`} type="audio/mp3" />
           </audio>
           {/* {!isPlaying && (
