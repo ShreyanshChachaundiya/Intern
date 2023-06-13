@@ -42,6 +42,7 @@ const LogIn = () => {
     const res = await responce.json();
     if (!responce.ok) {
       console.log(res);
+      setIsLoading(false);
 
       if (res.status === 401) {
         const errors = {};

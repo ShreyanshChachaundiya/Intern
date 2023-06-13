@@ -74,6 +74,7 @@ const Main2 = () => {
     const res = await responce.json();
     if (!responce.ok) {
       console.log(res);
+      setIsLoading(false)
 
       if (res.status === 422) {
         const errors = {};
