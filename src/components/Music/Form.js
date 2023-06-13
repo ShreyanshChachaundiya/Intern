@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
+import Loader from "../../shared/Loader";
 
 const Form = ({ handleClose }) => {
   const auth = useContext(AuthContext);
@@ -12,6 +13,7 @@ const Form = ({ handleClose }) => {
   const id = auth.userId;
   const token = auth.token;
   const [selectedMusic, setSelectedMusic] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMusicChange = (event) => {
     const file = event.target.files[0];
@@ -21,6 +23,7 @@ const Form = ({ handleClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
 
     const validationErrors = {};
   
@@ -38,9 +41,11 @@ const Form = ({ handleClose }) => {
     if (Object.keys(validationErrors).length === 0) {
       // Submit the form or perform any further actions
       await add();
+      setIsLoading(false)
       handleClose();
       window.location.reload("/blogs/All");
     } else {
+      setIsLoading(false)
       setErrors(validationErrors);
     }
   };
@@ -73,7 +78,9 @@ const Form = ({ handleClose }) => {
 
   return (
     <form className="max-w-xl mx-auto" onSubmit={handleSubmit}>
-
+      <div>
+        {isLoading&&<div className="h-1 absolute left-[48%] top-[-25%]"><Loader/></div>}
+      </div>
       <div>
         <label className="block mb-2 text-lg text-left">Music Upload:</label>
         <div>

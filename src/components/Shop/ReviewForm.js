@@ -2,34 +2,39 @@ import React, { useContext, useEffect, useState } from "react";
 import StarReview from "../../shared/card/StarReview";
 import { AuthContext } from "../../shared/context/auth-context";
 
-const ReviewForm = ({ item }) => {
-  const [title,setTitle] = useState();
+const ReviewForm = ({ item, setIsLoading }) => {
+  const [title, setTitle] = useState();
   const [errors, setErrors] = useState();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const user = useContext(AuthContext);
   const token = user.token;
-  const name=user.name;
+  const name = user.name;
 
   const handleReview = async () => {
-    const responce = await fetch("https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/reviews/add", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        title:title,
-        name:name,
-        item: item._id,
-        rating:rating,
-        review:comment,
-      }),
-    });
+    setIsLoading(true);
+    const responce = await fetch(
+      "https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/reviews/add",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: title,
+          name: name,
+          item: item._id,
+          rating: rating,
+          review: comment,
+        }),
+      }
+    );
     const res = await responce.json();
     if (!responce.ok) {
       const validationErrors = {};
       validationErrors.check = "invalid input passed check your inputs";
+      setIsLoading(false);
       setErrors(validationErrors);
       throw new Error(res.message);
     }
@@ -47,7 +52,8 @@ const ReviewForm = ({ item }) => {
     e.preventDefault();
     // Perform form submission logic here
     await handleReview();
-    window.location.reload(`/shop/${item._id}`)
+    setIsLoading(false);
+    window.location.reload(`/shop/${item._id}`);
     console.log("Rating:", rating);
     console.log("Comment:", comment);
     setRating(0);
@@ -76,7 +82,9 @@ const ReviewForm = ({ item }) => {
           <input
             id="comment"
             value={title}
-            onChange={(e)=>{setTitle(e.target.value)}}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
             required
             className="w-full px-2"
           />

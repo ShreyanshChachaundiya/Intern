@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../shared/context/auth-context";
+import Loader from "../shared/Loader";
 
 const Main2 = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [audio, SetAudio] = useState("");
   const [formerrors, setFormErrors] = useState("");
   const [formerrors1, setFormErrors1] = useState("");
@@ -50,7 +52,7 @@ const Main2 = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true)
     const responce = await fetch(
       "https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/users/signup",
       {
@@ -87,13 +89,14 @@ const Main2 = () => {
     }
     console.log(res);
     // navigate(`/main/${res.userId}`);
+    setIsLoading(false);
     navigate("/main");
     auth.login(res.userId,res.token,res.name,res.userName,res.role);
   };
 
   const handleLog = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const responce = await fetch(
       "https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/users/loginByName",
       {
@@ -122,6 +125,7 @@ const Main2 = () => {
     console.log(res);
     auth.login(res.userId,res.token,res.name,res.userName);
     // navigate(`/main/${res.userId}`);
+    setIsLoading(false)
     navigate("/main");
   };
 
@@ -182,12 +186,20 @@ const Main2 = () => {
             meet Friends, Family. Strangers, share News, Stories, send a
             Message, Videos, Photos, Money and more, with whom you wish!
           </span>
+         
         </div>
+        
       </div>
 
       <div className="z-20 w-[20%] relative left-[39%] top-[-50vh]">
         <img src="icons/brick.png" alt="error" />
       </div>
+      {/* <Loader/> */}
+
+      <div className="absolute left-[10%] top-[-30%]">
+        {isLoading&&<Loader/>}
+      </div>
+     
 
       <div className="top-[-100vh] left-[-35%] z-10 relative flex flex-col gap-5">
         <form onSubmit={handleLog}>

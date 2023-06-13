@@ -32,6 +32,7 @@ import Videos from "./Pages/Videos/videos";
 import VideoPicker from "./shared/Video/VideoPicker";
 import Music from "./Pages/Music/Music";
 import CloudinaryConfig from "./cloudinaryConfig";
+import Loader from "./shared/Loader";
 
 function App() {
   const [token, setToken] = useState(false);
@@ -169,6 +170,7 @@ function App() {
           }}
         > */}
         <BrowserRouter>{routes}</BrowserRouter>
+        {/* <Loader/> */}
         {/* </PostContext.Provider> */}
       </AuthContext.Provider>
    

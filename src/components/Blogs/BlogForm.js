@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
+import Loader from "../../shared/Loader";
 
 const BlogForm = ({ handleClose }) => {
   const [title, setTitle] = useState("");
@@ -7,11 +8,13 @@ const BlogForm = ({ handleClose }) => {
   const [date, setDate] = useState("");
   const [errors, setErrors] = useState({});
   const auth = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const id = auth.userId;
   const token = auth.token;
   const name = auth.name;
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const validationErrors = {};
     // if (name.trim() === "") {
@@ -32,9 +35,11 @@ const BlogForm = ({ handleClose }) => {
       // Submit the form or perform any further actions
       console.log("Form submitted:", { name, title, blogBody, date });
       await res();
+      setIsLoading(false);
       handleClose();
       window.location.reload("/blogs/All");
     } else {
+      setIsLoading(false)
       setErrors(validationErrors);
     }
   };
@@ -72,6 +77,13 @@ const BlogForm = ({ handleClose }) => {
 
   return (
     <form className="max-w-xl mx-auto" onSubmit={handleSubmit}>
+      <div>
+        {isLoading && (
+          <div className="h-1 absolute left-[48%] top-[-29%]">
+            <Loader />
+          </div>
+        )}
+      </div>
       <div className="mb-4">
         <label className="block mb-2 text-lg text-left" htmlFor="name">
           Name:

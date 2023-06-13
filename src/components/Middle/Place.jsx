@@ -3,7 +3,7 @@ import "./Place.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../shared/context/auth-context";
 
-const Place = () => {
+const Place = ({setIsLoading}) => {
   const navigate = useNavigate();
   const [value, setValue] = useState();
   const auth = useContext(AuthContext);
@@ -12,6 +12,7 @@ const Place = () => {
 
   const handleSubmit = async () => {
     //console.log(uid);
+    setIsLoading(true)
     const responce = await fetch("https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/posts", {
       method:"POST",
       headers: {
@@ -26,9 +27,11 @@ const Place = () => {
     const res = await responce.json();
 
     if(!responce.ok){
+      setIsLoading(false)
       throw new Error(res.message)
     }
     // navigate(`/main/${uid}`);
+    setIsLoading(false)
     window.location.reload();
   };
 

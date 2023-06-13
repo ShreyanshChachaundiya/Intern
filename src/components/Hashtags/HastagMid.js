@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../shared/context/auth-context";
+import Loader from "../../shared/Loader";
 
 const HastagMid = () => {
   const user = useContext(AuthContext);
@@ -8,8 +9,10 @@ const HastagMid = () => {
   const [hashtags, setHashtags] = useState();
   const [filterHashtags, setFilterHashtags] = useState();
   const [search, setSearch] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleHashtags = async () => {
+    setIsLoading(true);
     const responce = await fetch(
       "https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/posts/AllHashtags",
       {
@@ -25,6 +28,7 @@ const HastagMid = () => {
     if (!responce.ok) {
       return new Error(res.message);
     }
+    setIsLoading(false)
     setHashtags(res.hashtags);
     setFilterHashtags(res.hashtags);
   };
@@ -61,6 +65,9 @@ const HastagMid = () => {
       <h2 className="text-2xl font-bold mb-4 text-left text-[#b122d3]">
         Top Hashtags
       </h2>
+      <div className="">
+        {isLoading&&<div className="absolute left-[40%] top-[-20%]"><Loader/></div>}
+      </div>
       <ul className="space-y-2 flex flex-col ">
         {!!filterHashtags &&
           filterHashtags.map((hashtag, index) => (

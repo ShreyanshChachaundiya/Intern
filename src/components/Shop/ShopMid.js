@@ -5,12 +5,14 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../shared/context/auth-context";
 import ShopForm from "./ShopForm";
 import { data } from "../../shared/Data/data";
+import Loader from "../../shared/Loader";
 
 const ShopMid = () => {
   const [filterNews, setFilterNews] = useState(data);
   const [allItems, setAllItems] = useState();
   const [search, setSearch] = useState("");
   const [filterData, setFilterData] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const user = useContext(AuthContext);
   const role = user.role;
@@ -26,6 +28,7 @@ const ShopMid = () => {
   };
 
   const handleItems = async () => {
+    setIsLoading(true)
     const responce = await fetch(
       "https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/items/get/items",
       {
@@ -40,6 +43,7 @@ const ShopMid = () => {
     if (!responce.ok) {
       throw new Error(res.message);
     }
+    setIsLoading(false)
     setAllItems(res.items);
     // setFilterData(allItems);  this will not work...
     setFilterData(res.items);
@@ -77,6 +81,8 @@ const ShopMid = () => {
         </h2>
         {/* {role === "admin" && <ShopForm />} */}
       </div>
+      <div className="">{isLoading&&<div className="absolute left-[40%] top-[-20%]"><Loader/></div>}</div>
+      
       <div className="flex justify-between flex-wrap">
         {allItems?.map((item, ind) => {
           if (ind === 1 || ind === 0 || ind===2) {
@@ -86,7 +92,7 @@ const ShopMid = () => {
           }
         })}
       </div>
-      <div className="flex gap-5">
+      {!isLoading&&<div className="flex gap-5">
         <button
           class="bg-gray-300 text-white hover:bg-purple-500 focus:bg-purple-500 transition-colors duration-300 ease-in-out px-4 py-2 rounded"
           onClick={() => {
@@ -135,7 +141,8 @@ const ShopMid = () => {
         >
           All
         </button>
-      </div>
+      </div>}
+      <div className="">{isLoading&&<div className="absolute left-[40%] top-[-20%]"><Loader/></div>}</div>
       <div className="flex flex-wrap gap-10 mt-7 ">
         {filterData?.map((item) => (
           <Link to={`/shop/${item?._id}`}>

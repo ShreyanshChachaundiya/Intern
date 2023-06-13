@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import LeftBar from "../../components/Leftbar/LeftBar";
 import RightBar from "../../components/RightBar/RightBar";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import HastagMid from "../../components/Hashtags/HastagMid";
 import HashtagPosts from "../../components/Hashtags/HashtagPosts";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const Hastag = () => {
+  const { logout } = useContext(AuthContext);
   return (
     <div>
       <Navbar />
@@ -30,7 +32,11 @@ const Hastag = () => {
             <img src="icons/tick.png" />
           </div>
           <Link className="flink">
-            <div>
+            <div
+              onClick={() => {
+                logout();
+              }}
+            >
               Log out <span> </span> <img src="icons/log.png" />{" "}
               <img src="icons/out.png" />
             </div>

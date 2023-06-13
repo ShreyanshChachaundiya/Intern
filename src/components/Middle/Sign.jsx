@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./Sign.css";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../shared/context/auth-context";
+import Loader from "../../shared/Loader";
 
 const Sign = () => {
   const [data, setData] = useState({});
@@ -9,6 +10,7 @@ const Sign = () => {
   const auth = useContext(AuthContext);
   const [user, setUser] = useState({});
   const token = auth.token;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLike = async () => {
     console.log(data?._id);
@@ -30,6 +32,7 @@ const Sign = () => {
   };
 
   const res = async () => {
+    setIsLoading(true);
     const responce1 = await fetch(
       `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/users/${auth.userId}`,
       {
@@ -59,10 +62,11 @@ const Sign = () => {
     );
     const res = await responce.json();
     if (!responce.ok) {
+      setIsLoading(false);
       throw new Error(res.message);
     }
 
-    console.log(res.posts[res.posts.length - 1]);
+    setIsLoading(false);
     setData(res.posts[res.posts.length - 1]);
   };
 
@@ -72,59 +76,68 @@ const Sign = () => {
 
   return (
     <div className="sign">
-      <span>Your Signature</span>
-      <div className="stop">
-        <div>
-          <img src="icons/man.png" />
-        </div>
-        <div>
-          <div>
-            <span className="stxt">
-              {user.name ? user.name : "Jean-Beni Lauterfield"}{" "}
-              <img src="icons/tick.png" />
-            </span>
+      <div className="">
+        {isLoading && (
+          <div className="absolute left-[40%] top-[-100%]">
+            <Loader />
           </div>
-          <div>
-            <span className="stextt">
-              {user.userName ? "@" + user.userName : "@realJeanBenil"}
-            </span>
-          </div>
-        </div>
+        )}
       </div>
-      <div className="smid">
-        <span>
-          {data.description
-            ? data.description
-            : "My mum just visited us today, the kids are on the moon"}
-        </span>
-      </div>
-      <div className="sbot">
-        <Link className="sbd" onClick={handleLike}>
-          <div className="sbd">
-            <img src="icons/like.png" />
-            <span>{data.likes ? data.likes.length : 81}</span>
+      {!isLoading&&<div>
+        <span className="justify-start flex">Your Signature</span>
+        <div className="stop">
+          <div>
+            <img src="icons/man.png" />
           </div>
-        </Link>
+          <div>
+            <div>
+              <span className="stxt">
+                {user.name ? user.name : "Jean-Beni Lauterfield"}{" "}
+                <img src="icons/tick.png" />
+              </span>
+            </div>
+            <div>
+              <span className="stextt">
+                {user.userName ? "@" + user.userName : "@realJeanBenil"}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="smid">
+          <span>
+            {data.description
+              ? data.description
+              : "My mum just visited us today, the kids are on the moon"}
+          </span>
+        </div>
+        <div className="sbot">
+          <Link className="sbd" onClick={handleLike}>
+            <div className="sbd">
+              <img src="icons/like.png" />
+              <span>{data.likes ? data.likes.length : 81}</span>
+            </div>
+          </Link>
 
-        <Link className="sbd">
-          <div className="sbd">
-            <img src="icons/emoji.png" />
-            <span>{data.comments ? data.comments.length : 81}</span>
-          </div>
-        </Link>
-        <Link className="sbd">
-          <div className="sbd">
-            <img src="icons/Recommend.png" />
-            <span>81</span>
-          </div>
-        </Link>
-        <Link className="sbd">
-          <div className="sbd">
-            <img src="icons/wow.png" />
-            <span>81</span>
-          </div>
-        </Link>
-      </div>
+          <Link className="sbd">
+            <div className="sbd">
+              <img src="icons/emoji.png" />
+              <span>{data.comments ? data.comments.length : 81}</span>
+            </div>
+          </Link>
+          <Link className="sbd">
+            <div className="sbd">
+              <img src="icons/Recommend.png" />
+              <span>81</span>
+            </div>
+          </Link>
+          <Link className="sbd">
+            <div className="sbd">
+              <img src="icons/wow.png" />
+              <span>81</span>
+            </div>
+          </Link>
+        </div>
+      </div>}
       <span>Keepers Stories</span>
       <div className="stop">
         <div>

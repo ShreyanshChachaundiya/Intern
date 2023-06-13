@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../shared/context/auth-context";
+import Loader from "../shared/Loader";
 
 const LogIn = () => {
   const initialValues = { email: "", password: "" };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const auth = useContext(AuthContext);
   const token = auth.token;
 
@@ -18,6 +20,7 @@ const LogIn = () => {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     setFormErrors(validate(formValues));
 
@@ -50,6 +53,7 @@ const LogIn = () => {
     }
     console.log(res);
     // navigate(`/main/${res.userId}`);
+    setIsLoading(false)
     navigate("/main");
     auth.login(res.userId, res.token, res.name, res.userName, res.isAdmin);
     setIsSubmit(true);
@@ -92,6 +96,9 @@ const LogIn = () => {
           src="icons/final_logo.png"
           className="absolute inline w-[5%] top-[10%] left-[46%] h-[20%] "
         />
+        <div className="absolute top-[-25%] left-[45%]">
+          {isLoading&&<Loader/>}
+        </div>
         <div className="absolute text-white block w-[45%] left-[25%] top-[30%] text-center text-[120%]">
           <div>
             <span>
