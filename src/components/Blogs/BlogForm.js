@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
 import Loader from "../../shared/Loader";
 
-const BlogForm = ({ handleClose }) => {
-  const [title, setTitle] = useState("");
-  const [blogBody, setBlogBody] = useState("");
+const BlogForm = ({ handleClose, blogTitle, body, id }) => {
+  const [title, setTitle] = useState(blogTitle);
+  const [blogBody, setBlogBody] = useState(body);
   const [date, setDate] = useState("");
   const [errors, setErrors] = useState({});
   const auth = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const id = auth.userId;
+  const userId = auth.userId;
   const token = auth.token;
   const name = auth.name;
 
@@ -34,14 +34,43 @@ const BlogForm = ({ handleClose }) => {
     if (Object.keys(validationErrors).length === 0) {
       // Submit the form or perform any further actions
       console.log("Form submitted:", { name, title, blogBody, date });
-      await res();
+      {
+        blogTitle === "" ? await res() : await res1();
+      }
       setIsLoading(false);
       handleClose();
       window.location.reload("/blogs/All");
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
       setErrors(validationErrors);
     }
+  };
+
+  const res1 = async () => {
+    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/blogs/edit/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title: title,
+        body: blogBody,
+      }),
+    });
+    const res = await responce.json();
+    if (!responce.ok) {
+      setIsLoading(false)
+      if (res.status == 422) {
+        const validationErrors = {};
+        validationErrors.date =
+          "invalid input passed check your date format kindly";
+        setErrors(validationErrors);
+        setIsLoading(false)
+      }
+      throw new Error(res.message);
+    }
+    console.log("Success");
   };
 
   const res = async () => {
@@ -54,7 +83,7 @@ const BlogForm = ({ handleClose }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          user: id,
+          user: userId,
           name: name,
           title: title,
           body: blogBody,
@@ -64,11 +93,13 @@ const BlogForm = ({ handleClose }) => {
     );
     const res = await responce.json();
     if (!responce.ok) {
+      setIsLoading(false)
       if (res.status == 422) {
         const validationErrors = {};
         validationErrors.date =
           "invalid input passed check your date format kindly";
         setErrors(validationErrors);
+        
       }
       throw new Error(res.message);
     }
