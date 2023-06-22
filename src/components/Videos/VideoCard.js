@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import { FiPlayCircle } from "react-icons/fi";
 import { AuthContext } from "../../shared/context/auth-context";
 
-const VideoCard = ({ video }) => {
+const VideoCard = ({ video, setId, setCaption, setVideo, setIsOpen }) => {
   const [data, setData] = useState(video);
   const [isPlaying, setIsPlaying] = useState(false);
   const date = new Date(data?.date);
@@ -13,12 +13,9 @@ const VideoCard = ({ video }) => {
   });
   const auth = useContext(AuthContext);
   const token = auth.token;
-  const name=process.env.REACT_APP_CLOUD_NAME;
-  console.log(name);
-
-  const videoUrl = `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/${data?.filename}`
-  const videoUrl1 = `http://localhost:5000/${data?.filename}`
-
+  const userId = auth.userId;
+  const id = video?._id;
+  
 
   const handleLike = async () => {
     // Handle like functionality
@@ -43,6 +40,29 @@ const VideoCard = ({ video }) => {
     // Handle dislike functionality
   };
 
+  const handleEdit = () => {
+    setCaption(data.caption);
+    setVideo();
+    setId(id);
+    setIsOpen(true);
+  };
+
+  const handleDelete = async () => {
+    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/videos/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const res = await responce.json();
+    if (!responce.ok) {
+      throw new Error(res.message);
+    }
+    console.log("Success");
+    window.location.reload("/videos");
+  };
+
   const videoRef = useRef(null);
 
   const handlePlay = () => {
@@ -56,8 +76,6 @@ const VideoCard = ({ video }) => {
       setIsPlaying(true);
     }
   };
- 
-
 
   return (
     <div className="w-[100%] rounded overflow-hidden shadow-lg">
@@ -77,7 +95,6 @@ const VideoCard = ({ video }) => {
         <div style={{ position: "relative" }}>
           <video
             ref={videoRef}
-            
             // src={videoUrl}
             // src="/videos/testing.mp4"
             // publicId={data?.publicId}
@@ -87,10 +104,12 @@ const VideoCard = ({ video }) => {
             className="h-[24rem]"
             style={{ objectFit: "cover" }}
           >
-          <source src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`} type="video/mp4" />
-
+            <source
+              src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`}
+              type="video/mp4"
+            />
           </video>
-        
+
           {!isPlaying && (
             <button
               onClick={handlePlay}
@@ -112,7 +131,6 @@ const VideoCard = ({ video }) => {
         <div className="flex justify-between mb-2 align-bottom ">
           <div className="text-gray-800 text-end justify-end align-bottom w-full h-[100%] flex">
             111m views
-          
           </div>
         </div>
         <div className="flex justify-start mb-5">
@@ -144,6 +162,21 @@ const VideoCard = ({ video }) => {
             14k
           </button>
         </div>
+        {video.user === userId && (
+          <div className="flex justify-end gap-10 pt-3">
+            <span
+              className="text-gray-500 cursor-pointer"
+              onClick={() => {
+                handleEdit()
+              }}
+            >
+              Edit{" "}
+            </span>
+            <span className="text-red-500 cursor-pointer" onClick={() => {handleDelete()}}>
+              delete
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

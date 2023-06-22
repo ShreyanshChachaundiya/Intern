@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
 import Loader from "../../shared/Loader";
 
-const Form = ({ handleClose }) => {
+const Form = ({ handleClose, musicTitle, musicArt, mid, openModal }) => {
   const auth = useContext(AuthContext);
   const userName = auth.name;
   const [name, setName] = useState(userName);
-  const [title, setTitle] = useState("");
-  const [artist, setArtist] = useState("");
-  const [isMusic, setIsMusic] = useState(false);
+  const [title, setTitle] = useState(musicTitle);
+  const [artist, setArtist] = useState(musicArt);
+  const [isMusic, setIsMusic] = useState(musicTitle===""?false:true);
   const [errors, setErrors] = useState({});
   const id = auth.userId;
   const token = auth.token;
@@ -40,7 +40,9 @@ const Form = ({ handleClose }) => {
     // Check if there are any errors
     if (Object.keys(validationErrors).length === 0) {
       // Submit the form or perform any further actions
-      await add();
+    
+      {musicTitle===""?await add():await edit();}
+      // await add();
       setIsLoading(false)
       handleClose();
       window.location.reload("/blogs/All");
@@ -55,6 +57,7 @@ const Form = ({ handleClose }) => {
     formData.append("music", selectedMusic);
     formData.append("title",title);
     formData.append("artist",artist);
+    formData.append("user",id);
     const responce = await fetch("https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/musics/add", {
       method: "POST",
       headers: {
@@ -76,14 +79,44 @@ const Form = ({ handleClose }) => {
     console.log("Success");
   };
 
+  const edit = async () => {
+
+    const responce = await fetch(
+      `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/musics/edit/${mid}`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title:title,
+          artist:artist
+        }),
+      }
+    );
+    const res = await responce.json();
+    if (!responce.ok) {
+      if (res.status == 422) {
+        const validationErrors = {};
+        validationErrors.category = "invalid input passed check your inputs";
+        setErrors(validationErrors);
+        console.log("helo");
+      }
+      console.log(res.message);
+      throw new Error(res.message);
+    }
+    console.log("Success");
+  };
+
   return (
     <form className="max-w-xl mx-auto" onSubmit={handleSubmit}>
       <div>
         {isLoading&&<div className="h-1 absolute left-[48%] top-[-25%]"><Loader/></div>}
       </div>
       <div>
-        <label className="block mb-2 text-lg text-left">Music Upload:</label>
-        <div>
+       {musicTitle==="" && <label className="block mb-2 text-lg text-left">Music Upload:</label>}
+      <div>
       <input
         id="MusicInput"
         type="file"
@@ -92,7 +125,7 @@ const Form = ({ handleClose }) => {
         name="Music"
         onChange={handleMusicChange}
       />
-      <div className="flex items-center justify-center w-full h-10 border-2 border-gray-300 rounded-md">
+      {musicTitle==="" && <div className="flex items-center justify-center w-full h-10 border-2 border-gray-300 rounded-md">
         {selectedMusic ? (
           <audio
             className="w-full h-full object-cover"
@@ -121,7 +154,7 @@ const Form = ({ handleClose }) => {
             <span className="ml-2 text-lg">Upload a Music</span>
           </label>
         )}
-      </div>
+      </div>}
     </div>
         {errors.Music && <p className="text-red-500">{errors.Music}</p>}
       </div>

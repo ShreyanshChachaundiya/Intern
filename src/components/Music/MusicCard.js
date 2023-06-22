@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import { FiPlayCircle } from "react-icons/fi";
 import { AuthContext } from "../../shared/context/auth-context";
 
-const MusicCard = ({music}) => {
+const MusicCard = ({ music, setId, setTitle, setArtist, setIsOpen }) => {
   const [data, setData] = useState(music);
   const [isPlaying, setIsPlaying] = useState(false);
   const date = new Date(data?.date);
@@ -12,32 +12,34 @@ const MusicCard = ({music}) => {
     day: "numeric",
   });
   const auth = useContext(AuthContext);
+  const userId = auth.userId;
   const token = auth.token;
+  const id=music._id;
 
   const MusicUrl = `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/${data?.filename}`;
   const MusicUrl1 = `http://localhost:5000/${data?.filename}`;
 
-  const handleLike = async () => {
-    // Handle like functionality
-    // const responce = await fetch(
-    //   `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/Musics/${auth.userId}/${data?._id}`,
-    //   {
-    //     method: "GET",
-    //     headers: {
-    //       "content-type": "application/json",
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   }
-    // );
-    // const res = await responce.json();
-    // if (!responce.ok) {
-    //   throw new Error(res.message);
-    // }
-    // setData(res.Music);
+  const handleEdit = async () => {
+    setTitle(data.title);
+    setArtist(data.artist);
+    setId(id);
+    setIsOpen(true);
   };
 
-  const handleDislike = () => {
-    // Handle dislike functionality
+  const handleDelete = async () => {
+    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/musics/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const res = await responce.json();
+    if (!responce.ok) {
+      throw new Error(res.message);
+    }
+    console.log("Success");
+    window.location.reload("/music");
   };
 
   const MusicRef = useRef(null);
@@ -80,8 +82,9 @@ const MusicCard = ({music}) => {
             className="h-[24rem]"
             style={{ objectFit: "cover" }}
           >
-             <source src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`}  />
-      
+            <source
+              src={`https://res.cloudinary.com/dijd86cbs/video/upload/${data?.filename}`}
+            />
           </audio>
           {/* {!isPlaying && (
             <button
@@ -127,6 +130,24 @@ const MusicCard = ({music}) => {
                 </button>
               )}
             </div>
+            {music.user === userId && (
+              <div className="flex justify-end gap-10 pt-3">
+                <span
+                  className="text-gray-500 cursor-pointer"
+                  onClick={() => {
+                    handleEdit();
+                  }}
+                >
+                  Edit{" "}
+                </span>
+                <span
+                  className="text-red-500 cursor-pointer"
+                  onClick={() => {handleDelete()}}
+                >
+                  delete
+                </span>
+              </div>
+            )}
           </div>
         </div>
         {/* <div className="flex justify-between mb-2 align-bottom ">

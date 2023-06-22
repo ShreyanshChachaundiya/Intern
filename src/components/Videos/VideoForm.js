@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import Form from "./Form";
 
-const VideoForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const VideoForm = ({openModal, closeModal, isOpen, caption,setCaption, video ,setVideo, id}) => {
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  const handleOpen=()=>{
+    setVideo("");
+    setCaption("");
+    openModal();
+   }
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
 
   return (
     <div>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={openModal}
-      >
-        Add Video
+        onClick={handleOpen}
+      >  Add Video
+    
       </button>
 
       {isOpen && (
@@ -36,8 +34,13 @@ const VideoForm = () => {
                 X
               </button>
             </div>
-            <h2 className="text-xl font-bold mb-4  text-gray-500">Add Item</h2>
-            <Form handleClose={closeModal} />
+            <h2 className="text-xl font-bold mb-4  text-gray-500">    {caption===""?"Add Video":"Edit" }</h2>
+            <Form handleClose={closeModal} 
+              openModal={openModal}
+              videoCaption={caption}
+              video={video}
+              vid={id}
+            />
           </div>
         </div>
       )}

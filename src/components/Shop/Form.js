@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../shared/context/auth-context";
 
-const Form = ({ handleClose }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [cost, setCost] = useState("");
+const Form = ({ handleClose, descr, itemTitle,itemCost, itemCategory, id  }) => {
+  const [title, setTitle] = useState(itemTitle);
+  const [description, setDescription] = useState(descr);
+  const [category, setCategory] = useState(itemCategory);
+  const [cost, setCost] = useState(itemCost);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const auth = useContext(AuthContext);
-  const id = auth.userId;
+  const userId = auth.userId;
   const token = auth.token;
   const name = auth.name;
 
@@ -25,14 +26,14 @@ const Form = ({ handleClose }) => {
     if (category.trim() === "") {
       validationErrors.category = "category is required";
     }
-    if (cost.trim() === "") {
+    if (cost === "") {
       validationErrors.cost = "cost is required";
     }
 
     // Check if there are any errors
     if (Object.keys(validationErrors).length === 0) {
       // Submit the form or perform any further actions
-      await add();
+      {itemTitle==""?await add():await update();}
       handleClose();
       window.location.reload("/blogs/All");
     } else {
@@ -40,14 +41,44 @@ const Form = ({ handleClose }) => {
     }
   };
 
+  const update = async () => {
+    const responce = await fetch(`http://localhost:5000/api/items/edit/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title:title,
+        cost:cost,
+        description:description,
+        category:category
+      }),
+    });
+    const res = await responce.json();
+    if (!responce.ok) {
+      setIsLoading(false)
+      if (res.status == 422) {
+        const validationErrors = {};
+        validationErrors.date =
+          "invalid input passed check your date format kindly";
+        setErrors(validationErrors);
+        setIsLoading(false)
+      }
+      throw new Error(res.message);
+    }
+    console.log("Success");
+  };
+
   const add = async () => {
-    const responce = await fetch(`http://localhost:5000/api/items/add`, {
+    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/items/add`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        user:userId,
         title: title,
         cost: cost,
         description: description,

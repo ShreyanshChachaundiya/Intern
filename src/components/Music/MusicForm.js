@@ -1,22 +1,27 @@
 import React, { useState } from "react";
 import Form from "./Form";
 
-const MusicForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
+const MusicForm = ({
+  openModal,
+  closeModal,
+  isOpen,
+  id,
+  title,
+  artist,
+  setTitle,
+  setArtist,
+}) => {
+  const handleOpen = () => {
+    setArtist("");
+    setTitle("");
+    openModal();
   };
 
   return (
     <div>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={openModal}
+        onClick={handleOpen}
       >
         Add Music
       </button>
@@ -37,7 +42,13 @@ const MusicForm = () => {
               </button>
             </div>
             <h2 className="text-xl font-bold mb-4  text-gray-500">Add Item</h2>
-            <Form handleClose={closeModal} />
+            <Form
+              handleClose={closeModal}
+              openModal={openModal}
+              musicTitle={title}
+              musicArt={artist}
+              mid={id}
+            />
           </div>
         </div>
       )}

@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 import Form from "./Form";
 
-const ShopForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+const ShopForm = ({ openModal, closeModal, isOpen, title, cost, description,setDescription, setTitle , setCategory, setCost, id, category }) => {
+  
+  const handleOpen=()=>{
+    setTitle("");
+    setCost("");
+    setDescription("");
+    setCategory("");
+    openModal();
+   }
 
   return (
     <div>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={openModal}
+        onClick={handleOpen}
       >
         Add Item
       </button>
@@ -37,7 +36,7 @@ const ShopForm = () => {
               </button>
             </div>
             <h2 className="text-xl font-bold mb-4  text-gray-500">Add Item</h2>
-            <Form handleClose={closeModal} />
+            <Form handleClose={closeModal} itemCost={cost} itemTitle={title} id={id} descr={description} itemCategory={category}/>
           </div>
         </div>
       )}

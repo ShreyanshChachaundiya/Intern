@@ -3,16 +3,16 @@ import { AuthContext } from "../../shared/context/auth-context";
 import VideoPicker from "../../shared/Video/VideoPicker";
 import Loader from "../../shared/Loader";
 
-const Form = ({ handleClose }) => {
+const Form = ({ handleClose, videoCaption, video, vid }) => {
   const auth = useContext(AuthContext);
   const userName = auth.name;
   const [name, setName] = useState(userName);
-  const [caption, setCaption] = useState("");
-  const [isVideo, setIsVideo] = useState(false);
+  const [caption, setCaption] = useState(videoCaption);
+  const [isVideo, setIsVideo] = useState(video==""?false:true);
   const [errors, setErrors] = useState({});
   const id = auth.userId;
   const token = auth.token;
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(video);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleVideoChange = (event) => {
@@ -39,7 +39,7 @@ const Form = ({ handleClose }) => {
     // Check if there are any errors
     if (Object.keys(validationErrors).length === 0) {
       // Submit the form or perform any further actions
-      await add();
+      {videoCaption===""?await add():await edit()}
       setIsLoading(false);
       handleClose();
       window.location.reload("/blogs/All");
@@ -64,6 +64,34 @@ const Form = ({ handleClose }) => {
           Authorization: `Bearer ${token}`,
         },
         body: formData,
+      }
+    );
+    const res = await responce.json();
+    if (!responce.ok) {
+      if (res.status == 422) {
+        const validationErrors = {};
+        validationErrors.category = "invalid input passed check your inputs";
+        setErrors(validationErrors);
+        console.log("helo");
+      }
+      console.log(res.message);
+      throw new Error(res.message);
+    }
+    console.log("Success");
+  };
+
+  const edit = async () => {
+    const responce = await fetch(
+      `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/videos/edit/${vid}`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          caption:caption
+        }),
       }
     );
     const res = await responce.json();
@@ -106,8 +134,9 @@ const Form = ({ handleClose }) => {
       </div>
 
       <div>
-        <label className="block mb-2 text-lg text-left">Video Upload:</label>
+        { videoCaption===""&&<label className="block mb-2 text-lg text-left">Video Upload:</label>}
         <div>
+        
           <input
             id="videoInput"
             type="file"
@@ -116,7 +145,7 @@ const Form = ({ handleClose }) => {
             name="video"
             onChange={handleVideoChange}
           />
-          <div className="flex items-center justify-center w-full h-40 border-2 border-gray-300 rounded-md">
+          { videoCaption===""&&<div className="flex items-center justify-center w-full h-40 border-2 border-gray-300 rounded-md">
             {selectedVideo ? (
               <video
                 className="w-full h-full object-cover"
@@ -145,7 +174,7 @@ const Form = ({ handleClose }) => {
                 <span className="ml-2 text-lg">Upload a video</span>
               </label>
             )}
-          </div>
+          </div>}
         </div>
         {errors.video && <p className="text-red-500">{errors.video}</p>}
       </div>
