@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth-context";
+import DeleteConfirmation from "../modal/DeleteConfirmation";
 
 const BlogsCard = ({ blog, setIsOpen, setTitle, setBody, setId }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   const string = blog.body;
   const newString = string.slice(0, 100) + "...";
   const id = blog._id;
@@ -12,20 +15,28 @@ const BlogsCard = ({ blog, setIsOpen, setTitle, setBody, setId }) => {
   const token = user.token;
 
   const handleDelete = async () => {
-    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/blogs/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const responce = await fetch(
+      `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/blogs/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const res = await responce.json();
     if (!responce.ok) {
-      setIsLoading(false)
+      setIsLoading(false);
       throw new Error(res.message);
     }
     console.log("Success");
+    setShowConfirmation(false);
     window.location.reload("/blogs/All");
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
   };
 
   const handleEdit = () => {
@@ -54,6 +65,13 @@ const BlogsCard = ({ blog, setIsOpen, setTitle, setBody, setId }) => {
               Read More
             </span>
           </Link>
+          {showConfirmation && (
+            <DeleteConfirmation
+              onDelete={handleDelete}
+              onCancel={handleCancel}
+            />
+          )}
+        
           {userId === blog.user && (
             <div className="flex gap-5 justify-end b">
               <span
@@ -64,7 +82,14 @@ const BlogsCard = ({ blog, setIsOpen, setTitle, setBody, setId }) => {
               >
                 Edit{" "}
               </span>
-              <span className="text-red-500 cursor-pointer" onClick={()=>{handleDelete()}}>delete</span>
+              <span
+                className="text-red-500 cursor-pointer"
+                onClick={() => {
+                  setShowConfirmation(true);
+                }}
+              >
+                delete
+              </span>
             </div>
           )}
         </div>

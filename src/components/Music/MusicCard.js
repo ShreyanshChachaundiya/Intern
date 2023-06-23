@@ -1,10 +1,12 @@
 import React, { useContext, useRef, useState } from "react";
 import { FiPlayCircle } from "react-icons/fi";
 import { AuthContext } from "../../shared/context/auth-context";
+import DeleteConfirmation from "../../shared/modal/DeleteConfirmation";
 
 const MusicCard = ({ music, setId, setTitle, setArtist, setIsOpen }) => {
   const [data, setData] = useState(music);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const date = new Date(data?.date);
   const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -14,7 +16,7 @@ const MusicCard = ({ music, setId, setTitle, setArtist, setIsOpen }) => {
   const auth = useContext(AuthContext);
   const userId = auth.userId;
   const token = auth.token;
-  const id=music._id;
+  const id = music._id;
 
   const MusicUrl = `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/${data?.filename}`;
   const MusicUrl1 = `http://localhost:5000/${data?.filename}`;
@@ -27,19 +29,27 @@ const MusicCard = ({ music, setId, setTitle, setArtist, setIsOpen }) => {
   };
 
   const handleDelete = async () => {
-    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/musics/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const responce = await fetch(
+      `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/musics/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const res = await responce.json();
     if (!responce.ok) {
       throw new Error(res.message);
     }
     console.log("Success");
+    setShowConfirmation(false);
     window.location.reload("/music");
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
   };
 
   const MusicRef = useRef(null);
@@ -130,6 +140,13 @@ const MusicCard = ({ music, setId, setTitle, setArtist, setIsOpen }) => {
                 </button>
               )}
             </div>
+            {showConfirmation && (
+              <DeleteConfirmation
+                onDelete={handleDelete}
+                onCancel={handleCancel}
+              />
+            )}
+            
             {music.user === userId && (
               <div className="flex justify-end gap-10 pt-3">
                 <span
@@ -142,7 +159,9 @@ const MusicCard = ({ music, setId, setTitle, setArtist, setIsOpen }) => {
                 </span>
                 <span
                   className="text-red-500 cursor-pointer"
-                  onClick={() => {handleDelete()}}
+                  onClick={() => {
+                    setShowConfirmation(true);
+                  }}
                 >
                   delete
                 </span>

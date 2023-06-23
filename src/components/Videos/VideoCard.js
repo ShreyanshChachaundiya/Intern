@@ -1,10 +1,12 @@
 import React, { useContext, useRef, useState } from "react";
 import { FiPlayCircle } from "react-icons/fi";
 import { AuthContext } from "../../shared/context/auth-context";
+import DeleteConfirmation from "../../shared/modal/DeleteConfirmation";
 
 const VideoCard = ({ video, setId, setCaption, setVideo, setIsOpen }) => {
   const [data, setData] = useState(video);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const date = new Date(data?.date);
   const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -15,7 +17,6 @@ const VideoCard = ({ video, setId, setCaption, setVideo, setIsOpen }) => {
   const token = auth.token;
   const userId = auth.userId;
   const id = video?._id;
-  
 
   const handleLike = async () => {
     // Handle like functionality
@@ -40,6 +41,10 @@ const VideoCard = ({ video, setId, setCaption, setVideo, setIsOpen }) => {
     // Handle dislike functionality
   };
 
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
   const handleEdit = () => {
     setCaption(data.caption);
     setVideo();
@@ -48,18 +53,22 @@ const VideoCard = ({ video, setId, setCaption, setVideo, setIsOpen }) => {
   };
 
   const handleDelete = async () => {
-    const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/videos/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const responce = await fetch(
+      `https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/videos/delete/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const res = await responce.json();
     if (!responce.ok) {
       throw new Error(res.message);
     }
     console.log("Success");
+    setShowConfirmation(false);
     window.location.reload("/videos");
   };
 
@@ -162,17 +171,26 @@ const VideoCard = ({ video, setId, setCaption, setVideo, setIsOpen }) => {
             14k
           </button>
         </div>
+        {showConfirmation && (
+          <DeleteConfirmation onDelete={handleDelete} onCancel={handleCancel} />
+        )}
+      
         {video.user === userId && (
           <div className="flex justify-end gap-10 pt-3">
             <span
               className="text-gray-500 cursor-pointer"
               onClick={() => {
-                handleEdit()
+                handleEdit();
               }}
             >
               Edit{" "}
             </span>
-            <span className="text-red-500 cursor-pointer" onClick={() => {handleDelete()}}>
+            <span
+              className="text-red-500 cursor-pointer"
+              onClick={() => {
+                setShowConfirmation(true);
+              }}
+            >
               delete
             </span>
           </div>

@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth-context";
 import { useState } from "react";
+import DeleteConfirmation from "../modal/DeleteConfirmation";
 
 const ShopCardSm = ({
   item,
@@ -18,6 +19,7 @@ const ShopCardSm = ({
   const userId = user.userId;
   const token=user.token;
   const [isLoading, setIsLoading] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false);
   
 
   const handleEdit = () => {
@@ -28,6 +30,11 @@ const ShopCardSm = ({
     setId(id);
     setIsOpen(true);
   };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
 
   const handleDelete = async () => {
     const responce = await fetch(`https://backend-project-git-master-shreyanshchachaundiya.vercel.app/api/items/delete/${id}`, {
@@ -43,6 +50,7 @@ const ShopCardSm = ({
       throw new Error(res.message);
     }
     console.log("Success");
+    setShowConfirmation(false);
     window.location.reload("/shops/All");
   };
 
@@ -64,6 +72,13 @@ const ShopCardSm = ({
         <div>
           <Link to={`/shop/${item?._id}`}>View More</Link>
         </div>
+        {showConfirmation && (
+            <DeleteConfirmation
+              onDelete={handleDelete}
+              onCancel={handleCancel}
+            />
+          )}
+      
         {item.user===userId&&<div className="flex justify-between gap-5">
           <span
             className="text-gray-500 cursor-pointer"
@@ -73,7 +88,7 @@ const ShopCardSm = ({
           >
             Edit{" "}
           </span>
-          <span className="text-red-500 cursor-pointer" onClick={() => {handleDelete()}}>
+          <span className="text-red-500 cursor-pointer" onClick={() => {setShowConfirmation(true)}}>
             delete
           </span>
         </div>}
