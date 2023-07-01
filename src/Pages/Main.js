@@ -22,9 +22,11 @@ function Main() {
         <div className="amid">
           <Middle />
         </div>
+
         <div className="aright">
           <RightBar />
         </div>
+        
         <div className="lfte">
           <div className="lfoot">
             <div>

@@ -33,6 +33,8 @@ import VideoPicker from "./shared/Video/VideoPicker";
 import Music from "./Pages/Music/Music";
 import CloudinaryConfig from "./cloudinaryConfig";
 import Loader from "./shared/Loader";
+import Keepers from "./Pages/Keepers/Keepers";
+
 
 function App() {
   const [token, setToken] = useState(false);
@@ -42,6 +44,7 @@ function App() {
   const [name, setName] = useState(null);
   const [userName, setUserName] = useState();
   const [role, setRole] = useState(null);
+
 
   const login = useCallback((uid, token, name, userName, role) => {
     setToken(token);
@@ -118,6 +121,7 @@ function App() {
         <Route path="/shop/:id" element={<Product />} />
         <Route path="/videos" element={<Videos />} />
         <Route path="/music" element={<Music />} />
+        <Route path="/keepers" element={<Keepers />} />
 
         <Route path="/main2" element={<Main2 />} />
         <Route path="/*" element={<Error />} />
@@ -149,8 +153,7 @@ function App() {
   }
 
   return (
-    <div className="App bg-[#fcf9f9] h-[300vh]">
-    
+    <div className="App bg-[#fcf9f9] ">
       <AuthContext.Provider
         value={{
           isLoggedIn: !!token,
@@ -160,6 +163,7 @@ function App() {
           role: role,
           login: login,
           logout: logout,
+         
         }}
       >
         {/* <PostContext.Provider
@@ -173,7 +177,6 @@ function App() {
         {/* <Loader/> */}
         {/* </PostContext.Provider> */}
       </AuthContext.Provider>
-   
     </div>
   );
 }

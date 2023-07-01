@@ -1,12 +1,15 @@
 import React from "react";
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div className="navbarContainer">
-      <div>
-        <img src="../icons/Signature.png" />
-      </div>
+      <Link to="/main">
+        <div>
+          <img src="../icons/Signature.png" />
+        </div>
+      </Link>
       <div className="search_nav">
         <img src="../icons/Search.png" />
         <input
@@ -17,8 +20,8 @@ const Navbar = () => {
       </div>
       <div className="small">
         <span>
-        <img src="../icons/v.png" className="vicon"/>
-          <img src="../icons/man.png" className="icon"/>
+          <img src="../icons/v.png" className="vicon" />
+          <img src="../icons/man.png" className="icon" />
         </span>
         <span>JeanBenil</span>
       </div>
@@ -59,10 +62,14 @@ const Navbar = () => {
         <span>Memories</span>
       </div>
       <div className="small">
-        <span>
-          <img src="../icons/torch.png" className="icon" />
-        </span>
-        <span>Keepers</span>
+        <Link to="/keepers">
+          <div className="flex align-middle gap-1">
+            <span>
+              <img src="../icons/torch.png" className="icon" />
+            </span>
+            <span className="flex pt-1">Keepers</span>
+          </div>
+        </Link>
       </div>
     </div>
   );

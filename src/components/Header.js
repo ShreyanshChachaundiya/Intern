@@ -60,12 +60,15 @@ const Header = () => {
           </span>
           <span>Memories</span>
         </div>
+        <Link to="/keepers">
+
         <div className="small">
           <span>
             <img src="icons/torch.png" className="icon" />
           </span>
           <span>Keepers</span>
         </div>
+        </Link>
       </div>
     </div>
   );
